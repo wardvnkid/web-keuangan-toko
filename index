@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Laporan UMKM</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f4f6f9;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background-color: #d1dbe4; /* Warna abu-abu lembut sesuai sketsa */
+      border-radius: 16px;
+      padding: 35px 30px;
+      min-height: 450px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #1e293b;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    /* KOTAK KIRI STYLING */
+    .total-box {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .total-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .total-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 5px;
+    }
+
+    .table-container {
+      margin-top: 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow-x: auto;
+      max-height: 220px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background-color: #f8fafc;
+      font-weight: 700;
+    }
+
+    /* KOTAK KANAN STYLING */
+    .source-section {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .source-item {
+      background: #ffffff;
+      padding: 18px 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .source-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .btn-download {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 16px;
+      background-color: #2563eb;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-download:hover {
+      background-color: #1d4ed8;
+    }
+
+    .tele-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #475569;
+      margin-top: 5px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #22c55e;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- KOTAK KIRI -->
+    <div class="card">
+      <h2>Laporan UMKM Penjualan Hari Ini</h2>
+      <div class="subtitle">LAPORAN LKP KAMPUS</div>
+      
+      <div class="total-box">
+        <div class="total-label">TOTAL RP ...</div>
+        <div class="total-amount" id="totalRp">Rp 0</div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Varian Produk</th>
+              <th>Laku</th>
+              <th>Total (Rp)</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="3" style="text-align:center;">Memuat data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- KOTAK KANAN -->
+    <div class="card">
+      <h2>Sumber Data</h2>
+      
+      <div class="source-section">
+        <div class="source-item">
+          <div class="source-title">FILE EXCEL</div>
+          <p style="font-size: 0.85rem; color: #64748b;">Unduh rekapitulasi data penjualan dalam format Excel.</p>
+          <a href="#" class="btn-download" id="downloadExcelBtn">Download Excel</a>
+        </div>
+
+        <div class="source-item">
+          <div class="source-title">GRUB TELE / SOURCE DARI TELE</div>
+          <div class="tele-status">
+            <span class="status-dot"></span>
+            <span>Bot Telegram Aktif: <strong>@wardvnkid_bot</strong></span>
+          </div>
+          <p style="font-size: 0.8rem; color: #64748b; margin-top: 8px;" id="lastInputText">
+            Terhubung secara otomatis ke Google Sheets
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // MASUKKAN LINK CSV PUBLISH GOOGLE SHEETS ANDA DI SINI
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ.../pub?output=csv";
+
+    async function loadData() {
+      try {
+        const response = await fetch(SHEET_CSV_URL);
+        const data = await response.text();
+        
+        const rows = data.split('\n').map(row => row.split(','));
+        
+        let totalOmzet = 0;
+        let tableHTML = '';
+
+        // Parsing data dari Google Sheets (sesuaikan index kolomnya)
+        for (let i = 4; i < rows.length; i++) {
+          const varian = rows[i][1];
+          const laku = rows[i][3];
+          const totalStr = rows[i][4];
+
+          if (varian && totalStr) {
+            const totalVal = parseInt(totalStr.replace(/[^0-9]/g, '')) || 0;
+            totalOmzet += totalVal;
+
+            tableHTML += `
+              <tr>
+                <td>${varian}</td>
+                <td>${laku || 0}</td>
+                <td>Rp ${totalVal.toLocaleString('id-ID')}</td>
+              </tr>
+            `;
+          }
+        }
+
+        document.getElementById('totalRp').innerText = `Rp ${totalOmzet.toLocaleString('id-ID')}`;
+        document.getElementById('tableBody').innerHTML = tableHTML || '<tr><td colspan="3" style="text-align:center;">Belum ada penjualan hari ini</td></tr>';
+      } catch (err) {
+        console.log("Menampilkan sampel visual:", err);
+        // Data Dummy jika link CSV belum dimasukkan
+        document.getElementById('totalRp').innerText = "Rp 1.174.000";
+        document.getElementById('tableBody').innerHTML = `
+          <tr><td>Bolen</td><td>8</td><td>Rp 216.000</td></tr>
+          <tr><td>Pia ae</td><td>1</td><td>Rp 30.000</td></tr>
+          <tr><td>Leker holland</td><td>4</td><td>Rp 120.000</td></tr>
+          <tr><td>Pia nnn Mix</td><td>16</td><td>Rp 432.000</td></tr>
+        `;
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
